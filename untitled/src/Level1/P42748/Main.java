@@ -1,4 +1,4 @@
-package P42748;
+package Level1.P42748;
 import java.util.*;
 public class Main {
     public static void main(String[] args) {

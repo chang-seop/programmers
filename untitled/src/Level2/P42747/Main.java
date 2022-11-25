@@ -1,4 +1,4 @@
-package P42747;
+package Level2.P42747;
 import java.util.*;
 public class Main {
     public static void main(String[] args) {
