@@ -11,13 +11,14 @@ public class Main {
         System.out.println("result = " + result);
     }
 }
-//union - find (서로소 집합)
+//Union-Find (서로소 집합)
 class Solution {
 
     static int[] parent;
+    static int[] depth;
     public int solution(int n, int[][] computers) {
         parent = init(n);
-
+        depth = init(n);
         // 입력
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < computers[i].length; j++) {
@@ -53,7 +54,11 @@ class Solution {
             return x;
         } else {
             // 각 노드의 부모 노드를 찾아 올라간다.
-            return find(parent[x]);
+
+            // 최적화 1
+            // "경로 압축(Path Compression)"
+            // find 하면서 만난 모든 값의 부모 노드를 root 로 만든다.
+            return parent[x] = find(parent[x]);
         }
     }
 
@@ -62,6 +67,20 @@ class Solution {
         x = find(x);
         y = find(y);
         // 루트 노드의 값을 이어준다.
-        parent[y] = x;
+
+        // 최적화 2
+        // 두 값의 root 가 같으면 (이미 같은 트리) 합치지 않는다.
+        if(x != y) {
+            // 최적화 3
+            // "union-by-rank 최적화"
+            // 항상 높이가 더 낮은 트리를 높이가 높은 트리 밑에 넣는다. 즉, 높이가 더 높은 쪽을 root 로 삼는다.
+           if(depth[x] < depth[y]) {
+                int tmp = x;
+                x = y;
+                y = tmp;
+            }
+            parent[y] = x;
+            if(depth[x] == depth[y]) depth[x]++; // 만약 높이가 같다면 합친 후 (x의 높이 + 1)
+        }
     }
 }
